@@ -11,6 +11,8 @@ class ContatosController extends ChangeNotifier {
 
   ValueNotifier<List<Contato>> listContatos = ValueNotifier(<Contato>[]);
 
+ 
+
   void updateListContato() async {
        status.value = Status.loading;
     try {

@@ -55,10 +55,15 @@ class Contato {
       data['objectId'] = _objectId;
     }
     data['nome'] = _nome;
-    data['sobre_nome'] = _sobreNome ?? '';
+    if (_sobreNome != null) {
+      data['sobre_nome'] = _sobreNome;
+    }
+
     data['tel'] = _tel;
 
-    data['path'] = _path ?? '';
+    if (_path != null) {
+      data['path'] = _path;
+    }
 
     return data;
   }

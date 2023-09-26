@@ -1,3 +1,4 @@
+import 'package:bootcamp_2023_dio_lista_contatos/controller/contato_edit_controller.dart';
 import 'package:bootcamp_2023_dio_lista_contatos/controller/contatos_controller.dart';
 import 'package:bootcamp_2023_dio_lista_contatos/pages/lista_contatos.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,10 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => ContatosController(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ContatoEditController(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

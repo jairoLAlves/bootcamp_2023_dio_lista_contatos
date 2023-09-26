@@ -58,8 +58,18 @@ class ContatosBack4appService {
 
     debugPrint(result.toString());
   }
+    Future<void> updateContato(Contato contato) async {
+    Uri url = Uri(
+      scheme: _scheme,
+      host: _host,
+      path: '$_path/${contato.objectId}',
+    );
+    var result = await http.put(url, headers: _headers);
 
-  Future<void> saveContato(Contato contato) async {
+    debugPrint(result.toString());
+  }
+
+  Future<String?> saveContato(Contato contato) async {
     Uri url = Uri(
       scheme: _scheme,
       host: _host,
@@ -67,7 +77,13 @@ class ContatosBack4appService {
     );
     var result = await http.post(url, body: jsonEncode( contato.toJson()), headers: _headers);
 
-    debugPrint(result.body.toString());
+     var resultMap = jsonDecode(result.body) as Map<String, dynamic>;
+       debugPrint(resultMap.toString());
+    return resultMap['resultMap'];
+     
+     
+
+  
   }
 
 

@@ -1,6 +1,6 @@
 import 'package:bootcamp_2023_dio_lista_contatos/controller/contatos_controller.dart';
 import 'package:bootcamp_2023_dio_lista_contatos/model/contato.dart';
-import 'package:bootcamp_2023_dio_lista_contatos/pages/edit_contato_page.dart';
+import 'package:bootcamp_2023_dio_lista_contatos/pages/contato_edit_page.dart';
 import 'package:bootcamp_2023_dio_lista_contatos/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -27,41 +27,53 @@ class _ListaContatosState extends State<ListaContatos> {
   @override
   Widget build(BuildContext context) {
     var controller = context.watch<ContatosController>();
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const EditContatoPage(contato: null),
-              ));
-        },
-        child: const FaIcon(FontAwesomeIcons.userPlus),
-      ),
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Lista De Contatos'),
-      ),
-      body: Column(
-        children: [
-          const Row(
-            children: [
-              Text('Campo de pesquisa'),
-            ],
-          ),
-          Expanded(
-              child: ValueListenableBuilder(
-            valueListenable: controller.listContatos,
-            builder: (context, contatos, _) => ListView.builder(
-              itemCount: contatos.length,
-              itemBuilder: (context, index) {
-                Contato contato = contatos[index];
-
-                return contatoCard(contato, context);
-              },
+    return SafeArea(
+      child: Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: ()async {
+          bool? result = await Navigator.push<bool>(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ContatoEditPage(contato: null),
+                ));
+           if(result ?? false){
+             contatosController.updateListContato();
+           }     
+                
+          },
+          child: const FaIcon(FontAwesomeIcons.userPlus),
+        ),
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text('Lista De Contatos'),
+        ),
+        body: Column(
+          children: [
+            const Row(
+              children: [
+                //  Text('Campo de pesquisa'),
+              ],
             ),
-          )),
-        ],
+            Expanded(
+                child: ValueListenableBuilder(
+              valueListenable: controller.listContatos,
+              builder: (context, contatos, _) {
+                return (contatos.isEmpty)
+                    ? const Center(
+                        child: Text('Adicione novos contatos!'),
+                      )
+                    : ListView.builder(
+                        itemCount: contatos.length,
+                        itemBuilder: (context, index) {
+                          Contato contato = contatos[index];
+
+                          return contatoCard(contato, context);
+                        },
+                      );
+              },
+            )),
+          ],
+        ),
       ),
     );
   }
