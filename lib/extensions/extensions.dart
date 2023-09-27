@@ -7,8 +7,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 
 extension ContatoUtil on Contato {
-  Image bytesToImage(Uint8List bytes)  {
-    return  Image.memory(bytes);
+  Image bytesToImage(Uint8List bytes) {
+    return Image.memory(bytes);
   }
 
   Future<({XFile? file, Image? image, Uint8List? bytes})> initImage() async {
@@ -21,10 +21,10 @@ extension ContatoUtil on Contato {
         var pathLocal =
             (await path_provider.getApplicationDocumentsDirectory()).path;
 
-        file =   XFile('$pathLocal/$objectId.jpg');
+        file = XFile('$pathLocal/$objectId.jpg', name: objectId);
+
         bytes = await file.readAsBytes();
-        image =  bytesToImage(bytes);
-        
+        image = bytesToImage(bytes);
       } catch (e) {
         debugPrint(e.toString());
       }

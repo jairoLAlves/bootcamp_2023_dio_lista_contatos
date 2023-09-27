@@ -5,6 +5,7 @@ import 'package:custom_image_crop/custom_image_crop.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:bootcamp_2023_dio_lista_contatos/model/contato.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
@@ -118,18 +119,16 @@ class ContatoEditController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void _savePhoto(String? objectId) async {
-    if (_file != null && objectId != null) {
+  void _savePhoto(String objectId) async {
+    if (_file != null) {
       //salvando no diretório da aplicação
       var path = (await path_provider.getApplicationDocumentsDirectory()).path;
+
       await _file!.saveTo('$path/$objectId.jpg');
-      // await GallerySaver.saveImage(photo!.path);
     }
   }
 
   void onSave(BuildContext context) async {
-    String? objectId;
-
     formKey.currentState?.save();
     if (formKey.currentState?.validate() ?? false) {
       setName();
@@ -137,11 +136,14 @@ class ContatoEditController extends ChangeNotifier {
       _setTel();
 
       if (_contato.objectId == null) {
-        objectId = await contatosRepository.saveContato(_contato);
-        _savePhoto(objectId);
+        await contatosRepository.saveContato(_contato).then((id) {
+          if (id != null) {
+            _savePhoto(id);
+          }
+        });
       } else {
         contatosRepository.updateContato(_contato);
-        _savePhoto(_contato.objectId);
+        _savePhoto(_contato.objectId!);
       }
       Navigator.of(context).pop(true);
     }

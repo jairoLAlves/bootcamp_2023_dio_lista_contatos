@@ -1,4 +1,5 @@
 import 'package:bootcamp_2023_dio_lista_contatos/controller/contatos_controller.dart';
+import 'package:bootcamp_2023_dio_lista_contatos/enums/enums.dart';
 import 'package:bootcamp_2023_dio_lista_contatos/model/contato.dart';
 import 'package:bootcamp_2023_dio_lista_contatos/pages/contato_edit_page.dart';
 import 'package:bootcamp_2023_dio_lista_contatos/widgets/widgets.dart';
@@ -30,16 +31,15 @@ class _ListaContatosState extends State<ListaContatos> {
     return SafeArea(
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
-          onPressed: ()async {
-          bool? result = await Navigator.push<bool>(
+          onPressed: () async {
+            bool? result = await Navigator.push<bool>(
                 context,
                 MaterialPageRoute(
                   builder: (context) => const ContatoEditPage(contato: null),
                 ));
-           if(result ?? false){
-             contatosController.updateListContato();
-           }     
-                
+            if (result ?? false) {
+              contatosController.updateListContato();
+            }
           },
           child: const FaIcon(FontAwesomeIcons.userPlus),
         ),
@@ -47,33 +47,45 @@ class _ListaContatosState extends State<ListaContatos> {
           centerTitle: true,
           title: const Text('Lista De Contatos'),
         ),
-        body: Column(
-          children: [
-            const Row(
-              children: [
-                //  Text('Campo de pesquisa'),
-              ],
-            ),
-            Expanded(
-                child: ValueListenableBuilder(
-              valueListenable: controller.listContatos,
-              builder: (context, contatos, _) {
-                return (contatos.isEmpty)
-                    ? const Center(
-                        child: Text('Adicione novos contatos!'),
-                      )
-                    : ListView.builder(
-                        itemCount: contatos.length,
-                        itemBuilder: (context, index) {
-                          Contato contato = contatos[index];
+        body: ValueListenableBuilder(
+            valueListenable: contatosController.status,
+            builder: (context, status, child) => switch (status) {
+                  Status.loading => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  Status.success => Column(
+                      children: [
+                        const Row(
+                          children: [
+                            //  Text('Campo de pesquisa'),
+                          ],
+                        ),
+                        Expanded(
+                            child: ValueListenableBuilder(
+                          valueListenable: controller.listContatos,
+                          builder: (context, contatos, _) {
+                            return (contatos.isEmpty)
+                                ? const Center(
+                                    child: Text('Adicione novos contatos!'),
+                                  )
+                                : ListView.builder(
+                                    itemCount: contatos.length,
+                                    itemBuilder: (context, index) {
+                                      Contato contato = contatos[index];
 
-                          return contatoCard(contato, context);
-                        },
-                      );
-              },
-            )),
-          ],
-        ),
+                                      return contatoCard(
+                                          contato, context, contatosController);
+                                    },
+                                  );
+                          },
+                        )),
+                      ],
+                    ),
+                  // TODO: Handle this case.
+                  Status.start => const Center(),
+                  // TODO: Handle this case.
+                  Status.error => const Center(),
+                }),
       ),
     );
   }

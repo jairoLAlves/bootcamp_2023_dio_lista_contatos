@@ -12,10 +12,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => ContatosController(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => ContatoEditController(),
-        ),
+        ), 
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
