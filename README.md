@@ -1,11 +1,11 @@
 # BOOTCAMP 2023 DIO LISTA DE CONTATOS
 ## Capturas de Tela:
+
+
+
+
 <div style="">
-<img src="https://photos.onedrive.com/share/882515551C0A8F74!3075?cid=882515551C0A8F74&resId=882515551C0A8F74!3075&authkey=!AMS8R1lw8g05xKA&ithint=photo&e=JLV5FJ" alt="" style="height: 400px; width:200;"/>
-<img src="https://photos.onedrive.com/share/882515551C0A8F74!3078?cid=882515551C0A8F74&resId=882515551C0A8F74!3078&authkey=!AJJcGmB40I7q0es&ithint=photo&e=Y2PjWF" alt="" style="height: 400px; width:200px;"/>
-<img src="https://photos.onedrive.com/share/882515551C0A8F74!3077?cid=882515551C0A8F74&resId=882515551C0A8F74!3077&authkey=!ALGasgt6uqJt7Hg&ithint=photo&e=5gtpH4" alt="" style="height: 400px; width:200px;"/>
-<img src="https://photos.onedrive.com/share/882515551C0A8F74!3076?cid=882515551C0A8F74&resId=882515551C0A8F74!3076&authkey=!AMoorp4gUQbkKws&ithint=photo&e=8GR6bL" alt="" style="height: 400px; width:200px;"/>
-<img src="https://photos.onedrive.com/share/882515551C0A8F74!3079?cid=882515551C0A8F74&resId=882515551C0A8F74!3079&authkey=!ACX1MWT8PLxOdY0&ithint=photo&e=gXAbHk" alt="" style="height: 400px; width:200px;"/>
+<img src="https://api.onedrive.com/v1.0/drives/882515551C0A8F74/items/882515551C0A8F74!3079/content?cb=2023-09-27T21%3A23%3A56.63Z" alt="" style="height: 400px; width:200px;"/>
 </div>
 
 
