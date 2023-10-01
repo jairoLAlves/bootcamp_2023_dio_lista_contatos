@@ -1,41 +1,10 @@
 import 'package:bootcamp_2023_dio_lista_contatos/controller/contato_controller.dart';
 import 'package:bootcamp_2023_dio_lista_contatos/controller/contatos_controller.dart';
-import 'package:bootcamp_2023_dio_lista_contatos/extensions/extensions.dart';
 import 'package:bootcamp_2023_dio_lista_contatos/model/contato.dart';
 import 'package:bootcamp_2023_dio_lista_contatos/pages/contato_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-Widget contatoCard(
-    Contato contato, BuildContext context, ContatosController controller) {
-  ContatoController contatoController = ContatoController(contato: contato);
-  return InkWell(
-    key: ObjectKey(contato.objectId),
-    onTap: () async {
-      var result = await Navigator.push<bool?>(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ContatoPage(
-              contato: contato,
-              contatoController: contatoController,
-            ),
-          ));
-      if (result ?? false) {
-        controller.updateListContato();
-      }
-    },
-    child: ValueListenableBuilder(
-      valueListenable: contatoController.image,
-      builder: (__, image, _) => Card(
-        child: ListTile(
-          leading: smallAvatar(image: image),
-          title: Text(contato.nome ?? ''),
-          trailing: Text(contato.tel ?? ''),
-        ),
-      ),
-    ),
-  );
-}
+import 'package:provider/provider.dart';
 
 Widget smallAvatar({Image? image}) => CircleAvatar(
       child: (image == null)
@@ -69,23 +38,79 @@ Widget largeAvatar({Image? image}) => CircleAvatar(
             ),
     );
 
-TextFormField textField({
+Widget textField(
+  BuildContext context, {
   TextEditingController? controller,
   Widget? label,
   Widget? icon,
   String? Function(String?)? validator,
   void Function(String)? onChanged,
   TextInputType? keyboardType,
+  FocusNode? focusNode,
+  FocusNode? focusNodeNext,
 }) {
   return TextFormField(
     onChanged: onChanged,
     keyboardType: keyboardType,
     validator: validator,
     controller: controller,
+    focusNode: focusNode,
+    onFieldSubmitted: (_) {
+      focusNode?.unfocus();
+
+      FocusScope.of(context).requestFocus(focusNodeNext);
+    },
     decoration: InputDecoration(
+      labelStyle:
+          const TextStyle(fontWeight: FontWeight.w400, color: Colors.black),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
       icon: icon,
       label: label,
       border: const OutlineInputBorder(),
+    ),
+  );
+}
+
+Widget cardActionContato({
+  required String text,
+  Widget? icon,
+}) {
+  return InkWell(
+    onTap: () {},
+    child: Card(
+      elevation: 10,
+      child: Container(
+        width: 100,
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                  color: Colors.greenAccent,
+                  borderRadius: BorderRadius.circular(10)),
+              child: icon,
+            ),
+            Text(text),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+Widget successSave(BuildContext context) {
+
+  return Container(
+    color: Colors.green,
+    height: MediaQuery.of(context).size.height,
+    width: MediaQuery.of(context).size.width,
+    child: const Center(
+      child: FaIcon(
+        FontAwesomeIcons.check,
+        color: Colors.white,
+        size: 100,
+      ),
     ),
   );
 }

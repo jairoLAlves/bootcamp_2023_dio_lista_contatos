@@ -1,30 +1,41 @@
 import 'package:bootcamp_2023_dio_lista_contatos/enums/enums.dart';
-import 'package:bootcamp_2023_dio_lista_contatos/extensions/extensions.dart';
 import 'package:bootcamp_2023_dio_lista_contatos/repositories/contatos_back4app_repository.dart';
+import 'package:bootcamp_2023_dio_lista_contatos/repositories/image_base64_repository.dart';
 import 'package:custom_image_crop/custom_image_crop.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:bootcamp_2023_dio_lista_contatos/model/contato.dart';
-import 'package:gallery_saver/gallery_saver.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
-import 'package:path_provider/path_provider.dart' as path_provider;
-import 'package:path/path.dart';
 
 class ContatoEditController extends ChangeNotifier {
   late final Contato _contato;
-  PhoneNumber? _number;
-
+  late final ImageBase64Repository _imageRepository;
   late final ContatosBack4appRepository contatosRepository;
-
   late final TextEditingController nomeController;
   late final TextEditingController sobreNomeController;
   late final TextEditingController telController;
+  late final CustomImageCropController controllerCrop;
 
-  late CustomImageCropController controllerCrop;
+  final FocusNode? focusNodeNome = FocusNode();
+  final FocusNode? focusNodeSobreNome = FocusNode();
+  final FocusNode? focusNodeTel = FocusNode();
+  final FocusNode? focusNodeBtn = FocusNode();
+  ValueNotifier<Status> status = ValueNotifier(Status.start);
+
+  ValueNotifier<bool> onFocusChangeBtn = ValueNotifier(false);
+
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final String initialCountry = 'BR';
+  final ImagePicker piker = ImagePicker();
+
+  PhoneNumber? _number;
+  Uint8List? _bytes;
+
+  ValueNotifier<Image?> photo = ValueNotifier(null);
 
   ContatoEditController({Contato? contato}) {
+    _imageRepository = ImageBase64Repository();
     contatosRepository = ContatosBack4appRepository();
     controllerCrop = CustomImageCropController();
     _contato = contato ?? Contato();
@@ -36,7 +47,6 @@ class ContatoEditController extends ChangeNotifier {
   }
 
   void init() async {
-    print(_contato);
     telController = TextEditingController();
 
     nomeController = (_contato.nome != null)
@@ -60,19 +70,11 @@ class ContatoEditController extends ChangeNotifier {
   }
 
   void _initImage() async {
-    final result = await _contato.initImage();
-    _file = result.file;
-    photo.value = result.image;
-    notifyListeners();
+    if (_contato.path != null) {
+      photo.value = _imageRepository.getImage(pathImage: _contato.path!);
+      notifyListeners();
+    }
   }
-
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final String initialCountry = 'BR';
-  final ImagePicker piker = ImagePicker();
-
-  ValueNotifier<Image?> photo = ValueNotifier(null);
-
-  XFile? _file;
 
   Future<XFile?> capturaImage(PhotoIn? photoIn) async {
     return switch (photoIn) {
@@ -108,45 +110,53 @@ class ContatoEditController extends ChangeNotifier {
 
   void cropImage(MemoryImage image) async {
     try {
-      final Uint8List bytes = image.bytes;
-
-      _file = XFile.fromData(image.bytes);
-
-      photo.value = _contato.bytesToImage(bytes);
+      _bytes = image.bytes;
+      photo.value = _imageRepository.bytesToImage(_bytes!);
     } catch (e) {
       debugPrint(e.toString());
     }
+
     notifyListeners();
   }
 
-  void _savePhoto(String objectId) async {
-    if (_file != null) {
-      //salvando no diretório da aplicação
-      var path = (await path_provider.getApplicationDocumentsDirectory()).path;
-
-      await _file!.saveTo('$path/$objectId.jpg');
+  void _setPath() {
+    if (_bytes != null) {
+      _contato.path = _imageRepository.imageEncode(bytes: _bytes!);
     }
   }
 
   void onSave(BuildContext context) async {
     formKey.currentState?.save();
     if (formKey.currentState?.validate() ?? false) {
+      status.value = Status.loading;
       setName();
       setSobreNome();
       _setTel();
+      _setPath();
 
       if (_contato.objectId == null) {
-        await contatosRepository.saveContato(_contato).then((id) {
-          if (id != null) {
-            _savePhoto(id);
-          }
-        });
+        try {
+          contatosRepository.saveContato(_contato);
+          await Future.delayed(
+            const Duration(seconds: 10),
+          );
+          status.value = Status.success;
+        } catch (e) {
+          status.value = Status.error;
+          debugPrint(e.toString());
+        }
       } else {
-        contatosRepository.updateContato(_contato);
-        _savePhoto(_contato.objectId!);
+        try {
+          contatosRepository.updateContato(_contato);
+          await Future.delayed(
+            const Duration(seconds: 10),
+          );
+          status.value = Status.success;
+        } catch (e) {
+          status.value = Status.error;
+          debugPrint(e.toString());
+        }
       }
-      Navigator.of(context).pop(true);
     }
-    print(_contato);
   }
 }

@@ -64,7 +64,7 @@ class ContatosBack4appService {
       host: _host,
       path: '$_path/${contato.objectId}',
     );
-    var result = await http.put(url, headers: _headers);
+    var result = await http.put(url, headers: _headers, body: jsonEncode( contato.toJson()) );
 
     debugPrint(result.toString());
   }
