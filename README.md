@@ -18,7 +18,7 @@
 - [x] Usar os outros componentes aprendidos
 
 ## Checklist pessoal
-- [ ] Salvar base64 da imagem no Back4App
+- [x] Salvar base64 da imagem no Back4App
 
 
 
