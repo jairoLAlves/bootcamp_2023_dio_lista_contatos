@@ -1,7 +1,6 @@
 import 'package:bootcamp_2023_dio_lista_contatos/controller/contato_controller.dart';
 import 'package:bootcamp_2023_dio_lista_contatos/controller/contatos_controller.dart';
 import 'package:bootcamp_2023_dio_lista_contatos/enums/enums.dart';
-import 'package:bootcamp_2023_dio_lista_contatos/model/contato.dart';
 import 'package:bootcamp_2023_dio_lista_contatos/pages/contato_edit_page.dart';
 import 'package:bootcamp_2023_dio_lista_contatos/pages/contato_page.dart';
 import 'package:bootcamp_2023_dio_lista_contatos/widgets/widgets.dart';

@@ -1,10 +1,5 @@
-import 'package:bootcamp_2023_dio_lista_contatos/controller/contato_controller.dart';
-import 'package:bootcamp_2023_dio_lista_contatos/controller/contatos_controller.dart';
-import 'package:bootcamp_2023_dio_lista_contatos/model/contato.dart';
-import 'package:bootcamp_2023_dio_lista_contatos/pages/contato_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
 
 Widget smallAvatar({Image? image}) => CircleAvatar(
       child: (image == null)
@@ -100,7 +95,6 @@ Widget cardActionContato({
 }
 
 Widget successSave(BuildContext context) {
-
   return Container(
     color: Colors.green,
     height: MediaQuery.of(context).size.height,

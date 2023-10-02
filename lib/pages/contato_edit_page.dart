@@ -12,7 +12,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'dart:math' as math;
 
-import 'package:provider/provider.dart';
+
 
 class ContatoEditPage extends StatefulWidget {
   final Contato? contato;
@@ -313,7 +313,7 @@ class _ContatoEditPageState extends State<ContatoEditPage> {
                                           context,
                                           controller: contatoEditController
                                               .sobreNomeController,
-                                          label: const Text('Sobre nome'),
+                                          label: const Text('Sobrenome'),
                                           icon: const FaIcon(null),
                                           focusNode: contatoEditController
                                               .focusNodeSobreNome,

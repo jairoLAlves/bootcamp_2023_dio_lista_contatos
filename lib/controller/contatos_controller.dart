@@ -1,4 +1,3 @@
-import 'package:bootcamp_2023_dio_lista_contatos/controller/contato_controller.dart';
 import 'package:bootcamp_2023_dio_lista_contatos/enums/enums.dart';
 import 'package:bootcamp_2023_dio_lista_contatos/model/contato.dart';
 import 'package:bootcamp_2023_dio_lista_contatos/repositories/contatos_back4app_repository.dart';

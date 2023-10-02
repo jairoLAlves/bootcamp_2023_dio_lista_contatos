@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Lista De Contatos',
         theme: ThemeData(
+          appBarTheme: const AppBarTheme(backgroundColor: Colors.greenAccent),
           floatingActionButtonTheme: const FloatingActionButtonThemeData(
               backgroundColor: Colors.greenAccent),
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.greenAccent),
